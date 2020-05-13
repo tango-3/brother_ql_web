@@ -257,30 +257,33 @@ def get_serial():
     return cpuserial
 
 def print_label(data):
-    logger.debug("recieved data: {}".format(data))
-    font_path = FONTS['DejaVu Sans Mono']['Book']
-    im_font = ImageFont.truetype(font_path, 32)
-    width = 696
-    height = 230
-    im = Image.new('RGB', (width, height), 'white')
-    draw = ImageDraw.Draw(im)
+    try:
+        logger.debug("recieved data: {}".format(data))
+        font_path = FONTS['DejaVu Sans Mono']['Book']
+        im_font = ImageFont.truetype(font_path, 32)
+        width = 696
+        height = 230
+        im = Image.new('RGB', (width, height), 'white')
+        draw = ImageDraw.Draw(im)
 
-    lines = []
-    lines.append(data['testForName'])
-    for line in data['homeAddress'].split('\n'):
-        if line == '': line = ' '
-        lines.append(line)
-    
-    lines.append(data['postcode'])
-    lines.append("TEL: {}".format(data['postcode']))
-    lines.append("DOB: {}".format(data['dob']))
-    lines.append("TEST DATE: {}".format(data['appointmentDate']))
-    text = '\n'.join(lines)
+        lines = []
+        lines.append(data['testForName'])
+        for line in data['homeAddress'].split('\n'):
+            if line == '': line = ' '
+            lines.append(line)
+        
+        lines.append(data['postcode'])
+        lines.append("TEL: {}".format(data['postcode']))
+        lines.append("DOB: {}".format(data['dob']))
+        lines.append("TEST DATE: {}".format(data['appointmentDate']))
+        text = '\n'.join(lines)
 
-    offset = 0, 0
-    color = (0, 0, 0)
-    draw.multiline_text(offset, text, color, im_font, 'left')
-    im.save('sample-out.png')
+        offset = 0, 0
+        color = (0, 0, 0)
+        draw.multiline_text(offset, text, color, im_font, 'left')
+        im.save('sample-out.png')
+    except Exception as e:
+        logger.error(e)
 
 def main():
     global DEBUG, FONTS, BACKEND_CLASS, CONFIG
