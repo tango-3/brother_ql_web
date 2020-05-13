@@ -34,7 +34,7 @@ class firestore:
             print(u'New Label: {}'.format(change.document.id))
             callback(change.document.data())
 
-      if changes.length == 0
+      if len(changes.length) == 0:
         for doc in doc_snapshot:
           print(u'Received document snapshot: {}'.format(doc.id))
           callback(doc.data())
@@ -48,4 +48,4 @@ class firestore:
  
   def close(self):
     if not self.doc_watch is None:
-      self.doc_watch..unsubscribe()
+      self.doc_watch.unsubscribe()
