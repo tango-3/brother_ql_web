@@ -336,7 +336,7 @@ def main():
     serial = get_serial()
     version = git_version()
     branch = git_branch()
-    logger.debug("System Starting: serial {} branch {} version".format(serial, branch, version))
+    logger.debug("System Starting: serial {} branch {} version".format(**[serial, branch, version]))
     firestore = Firestore(serial, branch, version)
 
     firestore.listen(print_label)
