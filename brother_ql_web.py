@@ -290,7 +290,7 @@ def print_label(data):
         offset = 0, 0
         color = (0, 0, 0)
         draw.multiline_text(offset, data['testForName'], color, title_font, 'left')
-        offset = 0, title_text_size
+        offset = 0, title_text_size[1]
         draw.multiline_text(offset, text, color, im_font, 'left')
         im.save('sample-out.png')
     except Exception as e:
