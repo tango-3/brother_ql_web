@@ -35,12 +35,14 @@ class Firestore:
             print(u'New Label: {}'.format(change.document.id))
             print(u'Document data: {}'.format(change.document.to_dict()))
             callback(change.document.to_dict())
+            change.document.reference.delete()
 
       if len(changes) == 0:
         for doc in doc_snapshot:
           print(u'Received document snapshot: {}'.format(doc.id))
           print(u'Document data: {}'.format(doc.to_dict()))
           callback(doc.to_dict())
+          doc.reference.delete()
       callback_done.set()
 
     doc_ref = self.printerRef.collection('labels')
