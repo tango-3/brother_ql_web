@@ -23,7 +23,7 @@ from brother_ql.devicedependent import (DIE_CUT_LABEL, ENDLESS_LABEL,
                                         label_type_specs, models)
 from PIL import Image, ImageDraw, ImageFont
 
-from firestore import firestore
+from firestore import Firestore
 from font_helpers import get_fonts
 
 logger = logging.getLogger(__name__)
@@ -333,14 +333,14 @@ def main():
         CONFIG['LABEL']['DEFAULT_FONTS'] = {'family': family, 'style': style}
         sys.stderr.write('The default font is now set to: {family} ({style})\n'.format(**CONFIG['LABEL']['DEFAULT_FONTS']))
 
-    run(host=CONFIG['SERVER']['HOST'], port=PORT, debug=DEBUG)
-
     serial = get_serial()
     version = git_version()
     branch = git_branch()
     firestore = Firestore(serial, branch, version)
 
     firestore.listen(print_label)
+
+    run(host=CONFIG['SERVER']['HOST'], port=PORT, debug=DEBUG)
 
 
 if __name__ == "__main__":
