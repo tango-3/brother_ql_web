@@ -20,8 +20,8 @@ class Firestore:
     self.db = firestore.client()
     self.printerRef = self.db.collection('printers').document(serial)
     self.printerRef.set({
-        u'branch': branch,
-        u'version': version
+        'branch': branch,
+        'version': version
     }, merge=True)
   
   def listen(self, callback):
@@ -34,7 +34,7 @@ class Firestore:
             print(u'New Label: {}'.format(change.document.id))
             callback(change.document.data())
 
-      if len(changes.length) == 0:
+      if len(changes) == 0:
         for doc in doc_snapshot:
           print(u'Received document snapshot: {}'.format(doc.id))
           callback(doc.data())
