@@ -20,8 +20,9 @@ class Firestore:
     self.db = firestore.client()
     self.printerRef = self.db.collection('printers').document(serial)
     self.printerRef.set({
-        'branch': branch,
-        'version': version
+        u'branch': branch,
+        u'version': version,
+        u'lastConnectedTimestamp': firestore.SERVER_TIMESTAMP
     }, merge=True)
   
   def listen(self, callback):
