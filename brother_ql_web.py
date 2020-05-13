@@ -10,6 +10,7 @@ import json
 import logging
 import random
 import sys
+import time
 from io import BytesIO
 from subprocess import PIPE, Popen
 
@@ -392,7 +393,10 @@ def main():
 
         firestore.listen(print_label)
 
-        run(host=CONFIG['SERVER']['HOST'], port=PORT, debug=DEBUG)
+        while True:
+            firestore.ping()
+            time.sleep(5)
+        #run(host=CONFIG['SERVER']['HOST'], port=PORT, debug=DEBUG)
 
     except KeyboardInterrupt:
         firestore.close()

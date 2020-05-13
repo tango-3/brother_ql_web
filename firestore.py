@@ -50,7 +50,11 @@ class Firestore:
     # Watch the document
     self.doc_watch = doc_ref.on_snapshot(on_snapshot)
     # [END listen_document]
- 
+  def ping(self):
+    self.printerRef.set({
+        u'lastPing': firestore.SERVER_TIMESTAMP
+    }, merge=True)
+
   def close(self):
     if not self.doc_watch is None:
       self.doc_watch.unsubscribe()
