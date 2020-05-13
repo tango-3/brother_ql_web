@@ -230,13 +230,17 @@ def git_version():
     gitproc = Popen(['git', 'rev-parse', 'HEAD'],
                     stdout=PIPE)
     (stdout, _) = gitproc.communicate()
-    return stdout.strip()
+    version = stdout.strip()
+    logger.debug("Git Version {}".format(version))
+    return version
 
 def git_branch():
     gitproc = Popen(['git', 'symbolic-ref', '--short', 'HEAD'],
                     stdout=PIPE)
     (stdout, _) = gitproc.communicate()
-    return stdout.strip()
+    branch = stdout.strip()
+    logger.debug("Git Branch {}".format(branch))
+    return branch
 
 def get_serial():
     # Extract serial from cpuinfo file
@@ -249,7 +253,7 @@ def get_serial():
         f.close()
     except:
         cpuserial = "ERROR000000000"
-    
+    logger.debug("Cpu Serial {}".format(cpuserial))
     return cpuserial
 
 def print_label(data):
@@ -336,7 +340,6 @@ def main():
     serial = get_serial()
     version = git_version()
     branch = git_branch()
-    logger.debug("System Starting: serial {} branch {} version".format(**[serial, branch, version]))
     firestore = Firestore(serial, branch, version)
 
     firestore.listen(print_label)
