@@ -277,8 +277,9 @@ def print_label(data):
     lines.append("TEST DATE: {}".format(data['appointmentDate']))
     text = '\n'.join(lines)
 
-    offset = horizontal_offset, vertical_offset
-    draw.multiline_text(offset, text, (0, 0, 0), font=im_font, 'left')
+    offset = 0, 0
+    color = (0, 0, 0)
+    draw.multiline_text(offset, text, color, im_font, 'left')
     im.save('sample-out.png')
 
 def main():
