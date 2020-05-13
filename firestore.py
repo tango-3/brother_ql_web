@@ -33,12 +33,14 @@ class Firestore:
       for change in changes:
         if change.type.name == 'ADDED':
             print(u'New Label: {}'.format(change.document.id))
-            callback(change.document.data())
+            print(u'Document data: {}'.format(doc.to_dict()))
+            callback(change.document.to_dict())
 
       if len(changes) == 0:
         for doc in doc_snapshot:
           print(u'Received document snapshot: {}'.format(doc.id))
-          callback(doc.data())
+          print(u'Document data: {}'.format(doc.to_dict()))
+          callback(doc.to_dict())
       callback_done.set()
 
     doc_ref = self.printerRef.collection('labels')
