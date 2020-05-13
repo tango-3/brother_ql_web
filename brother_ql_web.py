@@ -232,7 +232,7 @@ def git_version():
     (stdout, _) = gitproc.communicate()
     version = stdout.strip()
     logger.debug("Git Version {}".format(version))
-    return version
+    return version.decode("utf-8") 
 
 def git_branch():
     gitproc = Popen(['git', 'symbolic-ref', '--short', 'HEAD'],
@@ -240,7 +240,7 @@ def git_branch():
     (stdout, _) = gitproc.communicate()
     branch = stdout.strip()
     logger.debug("Git Branch {}".format(branch))
-    return branch
+    return branch.decode("utf-8") 
 
 def get_serial():
     # Extract serial from cpuinfo file
