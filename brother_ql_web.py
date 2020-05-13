@@ -5,17 +5,25 @@
 This is a web service to print labels on Brother QL label printers.
 """
 
-import sys, logging, random, json, argparse
+import argparse
+import json
+import logging
+import random
+import sys
 from io import BytesIO
+from subprocess import PIPE, Popen
 
-from bottle import run, route, get, post, response, request, jinja2_view as view, static_file, redirect
-from PIL import Image, ImageDraw, ImageFont
-
-from brother_ql.devicedependent import models, label_type_specs, label_sizes
-from brother_ql.devicedependent import ENDLESS_LABEL, DIE_CUT_LABEL, ROUND_DIE_CUT_LABEL
+from bottle import get
+from bottle import jinja2_view as view
+from bottle import post, redirect, request, response, route, run, static_file
 from brother_ql import BrotherQLRaster, create_label
 from brother_ql.backends import backend_factory, guess_backend
+from brother_ql.devicedependent import (DIE_CUT_LABEL, ENDLESS_LABEL,
+                                        ROUND_DIE_CUT_LABEL, label_sizes,
+                                        label_type_specs, models)
+from PIL import Image, ImageDraw, ImageFont
 
+from firestore import init, listen
 from font_helpers import get_fonts
 
 logger = logging.getLogger(__name__)
@@ -218,6 +226,35 @@ def print_text():
     if DEBUG: return_dict['data'] = str(qlr.data)
     return return_dict
 
+def git_version():
+    gitproc = Popen(['git', 'rev-parse', 'HEAD'],
+                    stdout=PIPE)
+    (stdout, _) = gitproc.communicate()
+    return stdout.strip()
+
+def git_branch():
+    gitproc = Popen(['git', 'symbolic-ref', '--short', 'HEAD'],
+                    stdout=PIPE)
+    (stdout, _) = gitproc.communicate()
+    return stdout.strip()
+
+def get_serial():
+    # Extract serial from cpuinfo file
+    cpuserial = "0000000000000000"
+    try:
+        f = open('/proc/cpuinfo','r')
+        for line in f:
+            if line[0:6]=='Serial':
+                cpuserial = line[10:26]
+        f.close()
+    except:
+        cpuserial = "ERROR000000000"
+    
+    return cpuserial
+
+def print_label(data):
+    logger.debug("recieved data: {}".format(data))
+
 def main():
     global DEBUG, FONTS, BACKEND_CLASS, CONFIG
     parser = argparse.ArgumentParser(description=__doc__)
@@ -297,6 +334,14 @@ def main():
         sys.stderr.write('The default font is now set to: {family} ({style})\n'.format(**CONFIG['LABEL']['DEFAULT_FONTS']))
 
     run(host=CONFIG['SERVER']['HOST'], port=PORT, debug=DEBUG)
+
+    serial = get_serial()
+    version = git_version()
+    branch = git_branch()
+    init(serial, branch, version)
+
+    listen(print_label)
+
 
 if __name__ == "__main__":
     main()
