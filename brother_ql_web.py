@@ -272,14 +272,14 @@ def print_label(data):
         lines.append(data['postcode'].upper())
         lines.append("TEL: {}".format(data['phone']))
         lines.append("DOB: {}".format(data['dob']))
-        lines.append("TEST DATE: {}".format(data['appointmentDate']))
+        lines.append("{} TEST DATE: {}".format_map([data['test'], data['appointmentDate']]))
         text = '\n'.join(lines)
 
         im = Image.new('L', (20, 20), 'white')
         draw = ImageDraw.Draw(im)
 
         footer = ""
-        if data['contract'] == 'RCHT-Patient':
+        if data['contract'] and data['contract'] == 'RCHT-Patient':
             footer = "RCHT MAXIMS PATIENT: {}: {}".format_map([data['referringDepartment'], data['referrerName']])
 
         title_text_size = draw.multiline_textsize(data['testForName'].upper(), font=title_font)
