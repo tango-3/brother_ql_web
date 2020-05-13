@@ -23,7 +23,7 @@ from brother_ql.devicedependent import (DIE_CUT_LABEL, ENDLESS_LABEL,
                                         label_type_specs, models)
 from PIL import Image, ImageDraw, ImageFont
 
-from firestore import init, listen
+from firestore import firestore
 from font_helpers import get_fonts
 
 logger = logging.getLogger(__name__)
@@ -338,9 +338,9 @@ def main():
     serial = get_serial()
     version = git_version()
     branch = git_branch()
-    init(serial, branch, version)
+    firestore = Firestore(serial, branch, version)
 
-    listen(print_label)
+    firestore.listen(print_label)
 
 
 if __name__ == "__main__":

@@ -10,9 +10,9 @@ logger = logging.getLogger(__name__)
 
 
 # Use a service account
-cred = credentials.Certificate('~/cv-test-system-prod-firebase-adminsdk-rbmrc-012ad6b866.json')
+cred = credentials.Certificate('/home/pi/cv-test-system-prod-firebase-adminsdk-rbmrc-012ad6b866.json')
 
-class firestore:
+class Firestore:
   
   def __init__(self, serial, branch, version):
     logger.debug('Init Firestore')
