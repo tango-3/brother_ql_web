@@ -272,7 +272,7 @@ def print_label(data):
         lines.append(data['postcode'].upper())
         lines.append("TEL: {}".format(data['phone']))
         lines.append("DOB: {}".format(data['dob']))
-        lines.append("{} TEST DATE: {}".format_map([data['test'], data['appointmentDate']]))
+        lines.append("{} TEST DATE: {}".format(data['test'], data['appointmentDate']))
         text = '\n'.join(lines)
 
         im = Image.new('L', (20, 20), 'white')
@@ -280,7 +280,7 @@ def print_label(data):
 
         footer = ""
         if data['contract'] and data['contract'] == 'RCHT-Patient':
-            footer = "RCHT MAXIMS PATIENT: {}: {}".format_map([data['referringDepartment'], data['referrerName']])
+            footer = "RCHT MAXIMS PATIENT: {}: {}".format(data['referringDepartment'], data['referrerName'])
 
         title_text_size = draw.multiline_textsize(data['testForName'].upper(), font=title_font)
         body_text_size = draw.multiline_textsize(text, font=im_font)
