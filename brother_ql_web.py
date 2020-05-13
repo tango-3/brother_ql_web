@@ -269,7 +269,7 @@ def print_label(data):
             if line == '': line = ' '
             lines.append(line)
         
-        lines.append(data['postcode'])
+        lines.append(data['postcode'].upper())
         lines.append("TEL: {}".format(data['phone']))
         lines.append("DOB: {}".format(data['dob']))
         lines.append("TEST DATE: {}".format(data['appointmentDate']))
@@ -278,11 +278,16 @@ def print_label(data):
         im = Image.new('L', (20, 20), 'white')
         draw = ImageDraw.Draw(im)
 
-        title_text_size = draw.multiline_textsize(data['testForName'], font=title_font)
+        footer = ""
+        if data['contract'] == 'RCHT-Patient':
+            footer = "RCHT MAXIMS PATIENT: {}: {}".format_map([data['referringDepartment'], data['referrerName']])
+
+        title_text_size = draw.multiline_textsize(data['testForName'].upper(), font=title_font)
         body_text_size = draw.multiline_textsize(text, font=im_font)
+        foot_text_size = draw.multiline_textsize(footer, font=title_font)
 
         width = 696
-        height = body_text_size[1] + title_text_size[1] + 20
+        height = body_text_size[1] + title_text_size[1] + foot_text_size[1] + 20
         im = Image.new('RGB', (width, height), 'white')
         draw = ImageDraw.Draw(im)
 
@@ -292,6 +297,8 @@ def print_label(data):
         draw.multiline_text(offset, data['testForName'].upper(), color, title_font, 'left')
         offset = 5, title_text_size[1]
         draw.multiline_text(offset, text, color, im_font, 'left')
+        offset = 5, title_text_size[1] + body_text_size[1]
+        draw.multiline_text(offset,footer, color, title_font, 'left')
         im.save('sample-out.png')
     except Exception as e:
         logger.error(e)
