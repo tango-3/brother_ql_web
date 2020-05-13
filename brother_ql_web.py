@@ -282,14 +282,14 @@ def print_label(data):
         body_text_size = draw.multiline_textsize(text, font=im_font)
 
         width = 696
-        height = body_text_size[1] + title_text_size[1]
+        height = body_text_size[1] + title_text_size[1] + 20
         im = Image.new('RGB', (width, height), 'white')
         draw = ImageDraw.Draw(im)
 
 
         offset = 0, 0
         color = (0, 0, 0)
-        draw.multiline_text(offset, data['testForName'], color, title_font, 'left')
+        draw.multiline_text(offset, data['testForName'].upper(), color, title_font, 'left')
         offset = 0, title_text_size[1]
         draw.multiline_text(offset, text, color, im_font, 'left')
         im.save('sample-out.png')
