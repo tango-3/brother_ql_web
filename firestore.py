@@ -33,7 +33,7 @@ class Firestore:
       for change in changes:
         if change.type.name == 'ADDED':
             print(u'New Label: {}'.format(change.document.id))
-            print(u'Document data: {}'.format(doc.to_dict()))
+            print(u'Document data: {}'.format(change.document.to_dict()))
             callback(change.document.to_dict())
 
       if len(changes) == 0:
