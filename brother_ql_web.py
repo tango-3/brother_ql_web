@@ -308,6 +308,26 @@ def print_label(data):
         offset = 5, title_text_size[1] + body_text_size[1]
         draw.multiline_text(offset,footer, color, title_font, 'left')
         im.save('sample-out.png')
+
+        qlr = BrotherQLRaster(CONFIG['PRINTER']['MODEL'])
+
+        create_label(qlr, im, '62', red=False, threshold=70, cut=True, rotate=0)
+
+        if not DEBUG:
+            try:
+                be = BACKEND_CLASS(CONFIG['PRINTER']['PRINTER'])
+                be.write(qlr.data)
+                be.dispose()
+                del be
+            except Exception as e:
+                return_dict['message'] = str(e)
+                logger.warning('Exception happened: %s', e)
+                return return_dict
+
+        return_dict['success'] = True
+        if DEBUG: return_dict['data'] = str(qlr.data)
+        return return_dict
+
     except Exception as e:
         logger.error(e)
 
