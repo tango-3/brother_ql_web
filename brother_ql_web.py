@@ -320,13 +320,9 @@ def print_label(data):
                 be.dispose()
                 del be
             except Exception as e:
-                return_dict['message'] = str(e)
                 logger.warning('Exception happened: %s', e)
-                return return_dict
 
-        return_dict['success'] = True
-        if DEBUG: return_dict['data'] = str(qlr.data)
-        return return_dict
+        if DEBUG: logger.debug(str(qlr.data))
 
     except Exception as e:
         logger.error(e)
