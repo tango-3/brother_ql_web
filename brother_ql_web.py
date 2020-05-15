@@ -275,6 +275,10 @@ def print_label(data):
             lines.append("TEL: {}".format(data['phone']))
         if 'dob' in data:
             lines.append("DOB: {}".format(data['dob']))
+        if 'doctor' in data:
+            lines.append("DOCTOR: {}".format(data['doctor']))
+        else:
+            lines.append("DOCTOR: NKGP")
         if 'test' in data and 'appointmentDate' in data:
             lines.append("{} TEST DATE: {}".format(data['test'], data['appointmentDate']))
         text = '\n'.join(lines)
