@@ -288,7 +288,7 @@ def print_label(data):
 
         footer = ""
         if 'contract' in data and data['contract'] == 'RCHT-Patient':
-            footer = "RCHT MAXIMS PATIENT: {}: {}".format(data['referringDepartment'], data['referrerName'])
+            footer = "RCHT MAXIMS PATIENT: {}:\n {}".format(data['referringDepartment'], data['referrerName'])
 
         title_text_size = draw.multiline_textsize(data['testForName'].upper(), font=title_font)
         body_text_size = draw.multiline_textsize(text, font=im_font)
@@ -315,6 +315,7 @@ def print_label(data):
 
         try:
             be = BACKEND_CLASS(CONFIG['PRINTER']['PRINTER'])
+            be.write(qlr.data)
             be.write(qlr.data)
             be.dispose()
             del be
