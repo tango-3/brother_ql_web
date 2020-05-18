@@ -7,7 +7,7 @@
   },
   "PRINTER": {
     "MODEL": "QL-700",
-    "PRINTER": "file:///dev/usb/lp1"
+    "PRINTER": "file:///dev/usb/lp0"
   },
   "LABEL": {
     "DEFAULT_SIZE": "62",
