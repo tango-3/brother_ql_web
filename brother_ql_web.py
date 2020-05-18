@@ -313,16 +313,13 @@ def print_label(data):
 
         create_label(qlr, im, '62', red=False, threshold=70, cut=True, rotate=0)
 
-        if not DEBUG:
-            try:
-                be = BACKEND_CLASS(CONFIG['PRINTER']['PRINTER'])
-                be.write(qlr.data)
-                be.dispose()
-                del be
-            except Exception as e:
-                logger.warning('Exception happened: %s', e)
-
-        if DEBUG: logger.debug(str(qlr.data))
+        try:
+            be = BACKEND_CLASS(CONFIG['PRINTER']['PRINTER'])
+            be.write(qlr.data)
+            be.dispose()
+            del be
+        except Exception as e:
+            logger.warning('Exception happened: %s', e)
 
     except Exception as e:
         logger.error(e)
