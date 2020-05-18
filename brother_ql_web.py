@@ -288,7 +288,7 @@ def print_label(data):
 
         footer = ""
         if 'contract' in data and data['contract'] == 'RCHT-Patient':
-            footer = "RCHT MAXIMS PATIENT: {}:\n {}".format(data['referringDepartment'], data['referrerName'])
+            footer = "RCHT MAXIMS PATIENT: {}\nCONSULTANT: {}".format(data['referringDepartment'], data['referrerName'])
 
         title_text_size = draw.multiline_textsize(data['testForName'].upper(), font=title_font)
         body_text_size = draw.multiline_textsize(text, font=im_font)
