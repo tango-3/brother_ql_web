@@ -218,10 +218,10 @@ def main():
         serial = get_serial()
         version = git_version()
         branch = git_branch()
-        firestore = None
+        firestore = Firestore()
         while firestore is None:
             try:
-                firestore = Firestore(serial, branch, version)
+                firestore.connect(serial, branch, version)
                 firestore.listen(print_label)
             except Exception as e:
                 logger.error(e)
@@ -236,7 +236,7 @@ def main():
                 try:
                     firestore.close()
                 except: pass
-                firestore = Firestore(serial, branch, version)
+                firestore.connect(serial, branch, version)
                 firestore.listen(print_label)
         #run(host=CONFIG['SERVER']['HOST'], port=PORT, debug=DEBUG)
 

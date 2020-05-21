@@ -14,9 +14,11 @@ cred = credentials.Certificate('/home/pi/cv-test-system-prod-firebase-adminsdk-r
 
 class Firestore:
   
-  def __init__(self, serial, branch, version):
+  def __init__(self):
     logger.debug('Init Firestore')
     firebase_admin.initialize_app(cred)
+   
+  def connect(self, serial, branch, version):
     self.db = firestore.client()
     self.printerRef = self.db.collection('printers').document(serial)
     self.printerRef.set({
