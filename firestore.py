@@ -26,6 +26,7 @@ class Firestore:
         u'version': version,
         u'lastConnectedTimestamp': firestore.SERVER_TIMESTAMP
     }, merge=True)
+    return True
   
   def listen(self, callback):
     # Create an Event for notifying main thread.
@@ -51,6 +52,7 @@ class Firestore:
 
     # Watch the document
     self.doc_watch = doc_ref.on_snapshot(on_snapshot)
+    return True
     # [END listen_document]
   def ping(self):
     self.printerRef.set({

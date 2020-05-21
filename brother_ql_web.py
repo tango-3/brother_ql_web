@@ -219,10 +219,11 @@ def main():
         version = git_version()
         branch = git_branch()
         firestore = Firestore()
-        while firestore is None:
+        connected = False
+        while connected is False:
             try:
                 firestore.connect(serial, branch, version)
-                firestore.listen(print_label)
+                connected = firestore.listen(print_label)
             except Exception as e:
                 logger.error(e)
                 time.sleep(5)
