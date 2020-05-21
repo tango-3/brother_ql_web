@@ -225,6 +225,7 @@ def main():
                 firestore.listen(print_label)
             except Exception as e:
                 logger.error(e)
+                time.sleep(5)
 
         while True:
             try:
