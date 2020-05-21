@@ -220,7 +220,7 @@ def main():
         branch = git_branch()
         firestore = None
         while firestore is None:
-            try
+            try:
                 firestore = Firestore(serial, branch, version)
                 firestore.listen(print_label)
             except Exception as e:
@@ -234,7 +234,7 @@ def main():
                 logger.error(e)
                 try:
                     firestore.close()
-                 except: pass
+                except: pass
                 firestore = Firestore(serial, branch, version)
                 firestore.listen(print_label)
         #run(host=CONFIG['SERVER']['HOST'], port=PORT, debug=DEBUG)
