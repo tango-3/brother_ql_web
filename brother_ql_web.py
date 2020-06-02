@@ -69,72 +69,65 @@ def get_serial():
     return cpuserial
 
 def print_label(data):
-    try:
-        logger.debug("recieved data: {}".format(data))
-        font_path = FONTS['DejaVu Sans Mono']['Book']
-        title_font_path = FONTS['DejaVu Sans Mono']['Bold']
-        title_font = ImageFont.truetype(title_font_path, 32)
-        im_font = ImageFont.truetype(font_path, 30)
-        
-        lines = []
-        for line in data['homeAddress'].split('\n'):
-            if line == '': line = ' '
-            lines.append(line)
-        
-        lines.append(data['postcode'].upper())
-        if 'phone' in data:
-            lines.append("TEL: {}".format(data['phone']))
-        if 'dob' in data:
-            lines.append("DOB: {}".format(data['dob']))
-        if 'doctor' in data:
-            lines.append("DOCTOR: {}".format(data['doctor']))
-        else:
-            lines.append("DOCTOR: NKGP")
-        if 'test' in data and 'appointmentDate' in data:
-            lines.append("{} TEST DATE: {}".format(data['test'], data['appointmentDate']))
-        text = '\n'.join(lines)
+    logger.debug("recieved data: {}".format(data))
+    font_path = FONTS['DejaVu Sans Mono']['Book']
+    title_font_path = FONTS['DejaVu Sans Mono']['Bold']
+    title_font = ImageFont.truetype(title_font_path, 32)
+    im_font = ImageFont.truetype(font_path, 30)
+    
+    lines = []
+    for line in data['homeAddress'].split('\n'):
+        if line == '': line = ' '
+        lines.append(line)
+    
+    lines.append(data['postcode'].upper())
+    if 'phone' in data:
+        lines.append("TEL: {}".format(data['phone']))
+    if 'dob' in data:
+        lines.append("DOB: {}".format(data['dob']))
+    if 'doctor' in data:
+        lines.append("DOCTOR: {}".format(data['doctor']))
+    else:
+        lines.append("DOCTOR: NKGP")
+    if 'test' in data and 'appointmentDate' in data:
+        lines.append("{} TEST DATE: {}".format(data['test'], data['appointmentDate']))
+    text = '\n'.join(lines)
 
-        im = Image.new('L', (20, 20), 'white')
-        draw = ImageDraw.Draw(im)
+    im = Image.new('L', (20, 20), 'white')
+    draw = ImageDraw.Draw(im)
 
-        footer = ""
-        if 'contract' in data and data['contract'] == 'RCHT-Patient':
-            footer = "RCHT MAXIMS PATIENT: {}\nCONSULTANT: {}".format(data['referringDepartment'], data['referrerName'])
+    footer = ""
+    if 'contract' in data and data['contract'] == 'RCHT-Patient':
+        footer = "RCHT MAXIMS PATIENT: {}\nCONSULTANT: {}".format(data['referringDepartment'], data['referrerName'])
 
-        title_text_size = draw.multiline_textsize(data['testForName'].upper(), font=title_font)
-        body_text_size = draw.multiline_textsize(text, font=im_font)
-        foot_text_size = draw.multiline_textsize(footer, font=title_font)
+    title_text_size = draw.multiline_textsize(data['testForName'].upper(), font=title_font)
+    body_text_size = draw.multiline_textsize(text, font=im_font)
+    foot_text_size = draw.multiline_textsize(footer, font=title_font)
 
-        width = 696
-        height = body_text_size[1] + title_text_size[1] + foot_text_size[1] + 20
-        im = Image.new('RGB', (width, height), 'white')
-        draw = ImageDraw.Draw(im)
+    width = 696
+    height = body_text_size[1] + title_text_size[1] + foot_text_size[1] + 20
+    im = Image.new('RGB', (width, height), 'white')
+    draw = ImageDraw.Draw(im)
 
 
-        offset = 5, 0
-        color = (0, 0, 0)
-        draw.multiline_text(offset, data['testForName'].upper(), color, title_font, 'left')
-        offset = 5, title_text_size[1]
-        draw.multiline_text(offset, text, color, im_font, 'left')
-        offset = 5, title_text_size[1] + body_text_size[1]
-        draw.multiline_text(offset,footer, color, title_font, 'left')
-        im.save('sample-out.png')
+    offset = 5, 0
+    color = (0, 0, 0)
+    draw.multiline_text(offset, data['testForName'].upper(), color, title_font, 'left')
+    offset = 5, title_text_size[1]
+    draw.multiline_text(offset, text, color, im_font, 'left')
+    offset = 5, title_text_size[1] + body_text_size[1]
+    draw.multiline_text(offset,footer, color, title_font, 'left')
+    im.save('sample-out.png')
 
-        qlr = BrotherQLRaster(CONFIG['PRINTER']['MODEL'])
+    qlr = BrotherQLRaster(CONFIG['PRINTER']['MODEL'])
 
-        create_label(qlr, im, '62', red=False, threshold=70, cut=True, rotate=0)
+    create_label(qlr, im, '62', red=False, threshold=70, cut=True, rotate=0)
 
-        try:
-            be = BACKEND_CLASS(CONFIG['PRINTER']['PRINTER'])
-            be.write(qlr.data)
-            be.write(qlr.data)
-            be.dispose()
-            del be
-        except Exception as e:
-            logger.warning('Exception happened: %s', e)
-
-    except Exception as e:
-        logger.error(e)
+    be = BACKEND_CLASS(CONFIG['PRINTER']['PRINTER'])
+    be.write(qlr.data)
+    be.write(qlr.data)
+    be.dispose()
+    del be
 
 def main():
     try:

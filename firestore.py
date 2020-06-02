@@ -33,19 +33,22 @@ class Firestore:
     callback_done = threading.Event()
     # Create a callback on_snapshot function to capture changes
     def on_snapshot(doc_snapshot, changes, read_time):
-      for change in changes:
-        if change.type.name == 'ADDED':
-            print(u'New Label: {}'.format(change.document.id))
-            print(u'Document data: {}'.format(change.document.to_dict()))
-            callback(change.document.to_dict())
-            change.document.reference.delete()
+      try:
+        for change in changes:
+          if change.type.name == 'ADDED':
+              print(u'New Label: {}'.format(change.document.id))
+              print(u'Document data: {}'.format(change.document.to_dict()))
+              callback(change.document.to_dict())
+              change.document.reference.delete()
 
-      if len(changes) == 0:
-        for doc in doc_snapshot:
-          print(u'Received document snapshot: {}'.format(doc.id))
-          print(u'Document data: {}'.format(doc.to_dict()))
-          callback(doc.to_dict())
-          doc.reference.delete()
+        if len(changes) == 0:
+          for doc in doc_snapshot:
+            print(u'Received document snapshot: {}'.format(doc.id))
+            print(u'Document data: {}'.format(doc.to_dict()))
+            callback(doc.to_dict())
+            doc.reference.delete()
+      except Exception as e:
+        self.log(e)
       callback_done.set()
 
     doc_ref = self.printerRef.collection('labels')
@@ -58,6 +61,9 @@ class Firestore:
     self.printerRef.set({
         u'lastPing': firestore.SERVER_TIMESTAMP
     }, merge=True)
+
+  def log(self, log):
+    self.printerRef.collection('logs').add(log.to_dict())
 
   def close(self):
     if not self.doc_watch is None:
