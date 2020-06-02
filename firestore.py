@@ -64,7 +64,7 @@ class Firestore:
 
   def log(self, log):
     logger.debug(log)
-    self.printerRef.collection('logs').add(log)
+    self.printerRef.collection('logs').add({'error': repr(log)})
 
   def close(self):
     if not self.doc_watch is None:
