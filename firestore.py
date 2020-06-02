@@ -63,7 +63,8 @@ class Firestore:
     }, merge=True)
 
   def log(self, log):
-    self.printerRef.collection('logs').add(log.to_dict())
+    self.log(log)
+    self.printerRef.collection('logs').add(log)
 
   def close(self):
     if not self.doc_watch is None:
