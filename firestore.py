@@ -63,7 +63,7 @@ class Firestore:
     }, merge=True)
 
   def log(self, log):
-    self.log(log)
+    logger.log(log)
     self.printerRef.collection('logs').add(log)
 
   def close(self):
