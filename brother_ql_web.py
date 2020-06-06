@@ -85,6 +85,8 @@ def print_label(data):
         lines.append("TEL: {}".format(data['phone']))
     if 'dob' in data:
         lines.append("DOB: {}".format(data['dob']))
+    if 'nhsNumber' in data:
+        lines.append("NHS Number: {}".format(data['nhsNumber']))
     if 'doctor' in data:
         lines.append("DOCTOR: {}".format(data['doctor']))
     else:
