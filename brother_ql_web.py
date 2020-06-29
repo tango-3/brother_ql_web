@@ -81,8 +81,8 @@ def print_label(data):
         lines.append(line)
     
     lines.append(data['postcode'].upper())
-    if 'phone' in data:
-        lines.append("TEL: {}".format(data['phone']))
+    if 'phonenumber' in data:
+        lines.append("TEL: {}".format(data['phonenumber']))
     if 'dob' in data:
         lines.append("DOB: {}".format(data['dob']))
     if 'nhsNumber' in data:
